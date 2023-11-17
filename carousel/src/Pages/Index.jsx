@@ -1,29 +1,49 @@
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 import { GoDot, GoDotFill } from "react-icons/go"
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import DynamicImage from '../Components/DynamicImage'
-
-
-const images = [
-  {src:'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRXL6znEUclc_25-NyPi8pzSfMF0Em9d_b6cQ&usqp=CAU', alt:'tree' },
-  {src:'https://www.airdancers.ca/cdn/shop/products/Cloudbusters52.jpg?v=1417989925', alt:'ballons' },
-  {src:'https://files.worldwildlife.org/wwfcmsprod/images/Brown_Bear_/story_full_width/3box0qwlkk_brownbear_hero.jpg', alt:'bear' },
-  {src:'https://i.natgeofe.com/k/cd784533-e5ef-439a-8167-2ba61b0a9a4b/wave_16x9.jpg?w=1200', alt:'sea' },
-  {src:'https://beta.ctvnews.ca/national/sci-tech/2021/5/26/1_5443654/_jcr_content/root/responsivegrid/image.coreimg.jpeg/1622054687281/1-5443674.jpeg', alt:'birds' },
-]
-
-const imageSize = {
-  height: 300,
-  width: 500,
-}
 
 const Index = () => {
 
-  const [position, setPosition] = useState(0)
+  const images = [
+    {src:'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRXL6znEUclc_25-NyPi8pzSfMF0Em9d_b6cQ&usqp=CAU', alt:'tree' },
+    {src:'https://www.airdancers.ca/cdn/shop/products/Cloudbusters52.jpg?v=1417989925', alt:'ballons' },
+    {src:'https://files.worldwildlife.org/wwfcmsprod/images/Brown_Bear_/story_full_width/3box0qwlkk_brownbear_hero.jpg', alt:'bear' },
+    {src:'https://i.natgeofe.com/k/cd784533-e5ef-439a-8167-2ba61b0a9a4b/wave_16x9.jpg?w=1200', alt:'sea' },
+    {src:'https://beta.ctvnews.ca/national/sci-tech/2021/5/26/1_5443654/_jcr_content/root/responsivegrid/image.coreimg.jpeg/1622054687281/1-5443674.jpeg', alt:'birds' },
+  ]
 
-  // useEffect(()=>{
-  //   console.log(position)
-  // },[position])
+  const imageSize = {
+    height: 300,
+    width: 500,
+  }
+
+
+
+// start scroll on page load
+// stop scroll 
+
+
+
+
+  const [position, setPosition] = useState(0)
+  const [scroll, setScroll] = useState(true)
+
+  const timer = useRef()
+
+  useEffect(() => {
+    if(scroll) {
+      timer.current = setInterval(() => setPosition(prev => prev + imageSize.width), 3000 )
+    }else {
+      clearInterval(timer.current)
+    }
+
+    return () => clearInterval(timer.current)
+  },[scroll])
+
+  useEffect(() => {
+    position === (imageSize.width * (images.length)) && setPosition(0)
+  },[position])
 
   return (
     <>
@@ -83,29 +103,34 @@ const Index = () => {
       </div>
       
       {/* image dots */}
-      <div className="text-slate-700 text-3xl flex flex-row justify-center mt-4 gap-2">
+      <div className="text-slate-700 text-3xl flex flex-row justify-center items-center mt-4 gap-2">
         {images.map((img, ind) => {
           return (
             
             (ind * imageSize.width) === position ? 
             <GoDotFill 
               key={ind}
+              className="cursor-pointer"
               onClick={() => setPosition(ind * imageSize.width)}
             /> 
             : 
             <GoDot 
               key={ind}
+              className="cursor-pointer"
               onClick={() => setPosition(ind * imageSize.width)}
             />
             
           )
         })}
         {/* Add automatic scroll and off/off switch for it */}
+        <span 
+          className="text-xl font-semibold border-2 border-slate-600 px-[3px] rounded-md cursor-pointer"
+          onClick={()=> setScroll(prev => !prev)}
+        >
+          {scroll ? 'On' : 'Off'}
+          </span>
+  
       </div>
-
-
-
-
     </>
   )
 }
