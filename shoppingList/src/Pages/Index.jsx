@@ -38,12 +38,6 @@ const Index = () => {
     }
   }, [blankItems]);
 
-
-
-  
-
-
-
   const crossOffList = (evt) => {
     evt.target.classList.toggle('line-through')
   }
@@ -58,10 +52,6 @@ const Index = () => {
     setInput('')
   }
 
-  const addToStorage = () => localStorage.setItem('items', JSON.stringify(list))
-
-
-  
   return (
     <>
       <div className="flex flex-col justify-center items-center w-full h-screen">
