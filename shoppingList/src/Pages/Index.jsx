@@ -57,7 +57,7 @@ const Index = () => {
       <div className="flex flex-col justify-center items-center w-full h-screen">
       
         <nav className="h-1/12 w-full flex flex-row justify-center items-center mt-10">
-          <h1 className="text-2xl font-bold text-slate-600">Project 2: Shopping List</h1>
+          <h1 className="text-2xl font-bold text-slate-600">Project 4: Shopping List</h1>
         </nav>
 
         {/* carousel main */}
